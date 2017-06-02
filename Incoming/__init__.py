@@ -1,9 +1,17 @@
-handlers = ['event_callback', 'url_verification']
+"""Que puede procesar?"""
+HANDLERS = ['event_callback', 'url_verification']
 
-def process(path,data):
-    response = False
-    print()
-    if data['type'] in handlers:
-        module = __import__(__package__+'.'+data['type'],globals(),locals(),['process'])
-        response = module.process(path + data['type'] + '.',data)
+def get_flag(data):
+    """Que atributo lo define?"""
+    return data['type']
+
+
+def process(path, data):
+    """Resuelve si puede procesar, de ser asi procesa"""
+    response = ""
+    flag = get_flag(data)
+    if flag in HANDLERS:
+        module = __import__(
+            path + flag, globals(), locals(), ['process'])
+        response = module.process(path + flag + '.', data)
     return response

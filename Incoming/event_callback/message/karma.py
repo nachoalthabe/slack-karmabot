@@ -2,6 +2,9 @@
 # los datos
 
 import re
+from slackclient import SlackClient
+from settings import SLACK_TOKEN
+sc = SlackClient(SLACK_TOKEN)
 
 # https://regex101.com/r/1xb3kq/1/
 karmaRegex = r"<@[A-Z0-9]*>\ *(\+|\-){2,}"
@@ -17,9 +20,17 @@ def process(data):
         user = re.findall(userRegex, karamRaw).pop()
         localKarma = karamRaw.count('+') - karamRaw.count('-')
         karmaMap[user] = karmaMap.get(user, 0) + localKarma
-        touchedUsers.append(karmaMap[user])
-    print(touchedUsers.__len__())
+        touchedUsers.append(user)
+        response(data,user,localKarma,karmaMap[user])
+    return "KarmaBot!"
 
-def response(userData):{
-    #mandar un mensage con el estado actualizado de los karmas procesados
-}
+def response(data, user, localKarma, value):
+    if (localKarma > 0):
+        direction = 'aumento'
+    else:
+        direction = 'disminuyo'
+    sc.api_call(
+        "chat.postMessage",
+        channel=data['event']['channel'],
+        text='<@{0}> {1} su karma a {2}'.format(user, direction, value)
+    )
