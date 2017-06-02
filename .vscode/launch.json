@@ -6,7 +6,7 @@
         "type": "python",
         "request": "launch",
         "pythonPath": "${config:python.pythonPath}",
-        "program": "${workspaceRoot}/index.py",
+        "program": "${workspaceRoot}/wsgi.py",
         "cwd": "${workspaceRoot}",
         "env": {},
         "envFile": "${workspaceRoot}/.env",
